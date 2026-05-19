@@ -50,3 +50,13 @@ Fungsi `listener.accept()` mengembalikan `TcpStream` dan `SocketAddr`. `SocketAd
 - Hasil
 Server berhasil menampilkan informasi address setiap client yang terhubung. Pesan broadcast sekarang memiliki informasi tambahan berupa socket address pengirim sehingga identitas koneksi lebih mudah diketahui.
 
+
+**Tutorial 3.1**
+![alt text](image-5.png)
+
+
+**Tutorial 3.2**
+
+
+
+**Tutorial 3.Bonus**
