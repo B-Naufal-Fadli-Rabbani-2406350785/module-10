@@ -131,12 +131,18 @@ fn main() {
     let (executor, spawner) = new_executor_and_spawner();
 
     spawner.spawn(async {
-        println!("Naufal's Computer: howdy!");
+        println!("Task 1: howdy!");
         TimerFuture::new(Duration::new(2, 0)).await;
-        println!("Naufal's Computer: done!");
+        println!("Task 1: done!");
     });
 
-    println!("Naufal's Computer: hey hey");
+    spawner.spawn(async {
+        println!("Task 2: howdy!");
+        TimerFuture::new(Duration::new(1, 0)).await;
+        println!("Task 2: done!");
+    });
+
+    println!("Main thread continues...");
 
     drop(spawner);
 
