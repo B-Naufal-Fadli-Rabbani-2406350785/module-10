@@ -1,0 +1,58 @@
+   0.046337000s  INFO prepare_target{force=false package_id=tutorial-1 v0.1.0 (D:\AdPro\module-10\tutorial-1) target="tutorial-1"}: cargo::core::compiler::fingerprint: fingerprint error for tutorial-1 v0.1.0 (D:\AdPro\module-10\tutorial-1)/Check { test: false }/TargetInner { name: "tutorial-1", doc: true, ..: with_path("D:\\AdPro\\module-10\\tutorial-1\\src\\main.rs", Edition2024) }
+   0.046401800s  INFO prepare_target{force=false package_id=tutorial-1 v0.1.0 (D:\AdPro\module-10\tutorial-1) target="tutorial-1"}: cargo::core::compiler::fingerprint:     err: failed to read `D:\AdPro\module-10\tutorial-1\target\debug\.fingerprint\tutorial-1-30eb113e5049d6f7\bin-tutorial-1`
+
+Caused by:
+    The system cannot find the file specified. (os error 2)
+
+Stack backtrace:
+   0: git_midx_writer_dump
+   1: git_midx_writer_dump
+   2: git_midx_writer_dump
+   3: git_midx_writer_dump
+   4: git_filter_source_repo
+   5: git_filter_source_repo
+   6: git_filter_source_repo
+   7: git_filter_source_repo
+   8: git_filter_source_repo
+   9: git_filter_source_repo
+  10: git_filter_source_repo
+  11: git_libgit2_prerelease
+  12: <unknown>
+  13: <unknown>
+  14: <unknown>
+  15: <unknown>
+  16: git_midx_writer_dump
+  17: git_filter_source_repo
+  18: git_midx_writer_dump
+  19: BaseThreadInitThunk
+  20: RtlUserThreadStart
+   0.064474400s  INFO prepare_target{force=false package_id=tutorial-1 v0.1.0 (D:\AdPro\module-10\tutorial-1) target="tutorial-1"}: cargo::core::compiler::fingerprint: fingerprint error for tutorial-1 v0.1.0 (D:\AdPro\module-10\tutorial-1)/Check { test: true }/TargetInner { name: "tutorial-1", doc: true, ..: with_path("D:\\AdPro\\module-10\\tutorial-1\\src\\main.rs", Edition2024) }
+   0.064937300s  INFO prepare_target{force=false package_id=tutorial-1 v0.1.0 (D:\AdPro\module-10\tutorial-1) target="tutorial-1"}: cargo::core::compiler::fingerprint:     err: failed to read `D:\AdPro\module-10\tutorial-1\target\debug\.fingerprint\tutorial-1-0b5b4fc4939a87fe\test-bin-tutorial-1`
+
+Caused by:
+    The system cannot find the file specified. (os error 2)
+
+Stack backtrace:
+   0: git_midx_writer_dump
+   1: git_midx_writer_dump
+   2: git_midx_writer_dump
+   3: git_midx_writer_dump
+   4: git_filter_source_repo
+   5: git_filter_source_repo
+   6: git_filter_source_repo
+   7: git_filter_source_repo
+   8: git_filter_source_repo
+   9: git_filter_source_repo
+  10: git_filter_source_repo
+  11: git_libgit2_prerelease
+  12: <unknown>
+  13: <unknown>
+  14: <unknown>
+  15: <unknown>
+  16: git_midx_writer_dump
+  17: git_filter_source_repo
+  18: git_midx_writer_dump
+  19: BaseThreadInitThunk
+  20: RtlUserThreadStart
+    Checking tutorial-1 v0.1.0 (D:\AdPro\module-10\tutorial-1)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.57s
