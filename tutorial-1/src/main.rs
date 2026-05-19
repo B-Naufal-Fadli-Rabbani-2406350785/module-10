@@ -136,6 +136,8 @@ fn main() {
         println!("Naufal's Computer: done!");
     });
 
+    println!("Naufal's Computer: hey hey");
+
     drop(spawner);
 
     executor.run();
