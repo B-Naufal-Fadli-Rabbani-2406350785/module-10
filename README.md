@@ -70,4 +70,8 @@ Perubahan yang dilakukan meliputi:
 
 
 **Tutorial 3.Bonus**
+- Pada bagian bonus ini, saya mengganti websocket server JavaScript dengan websocket server Rust menggunakan Tokio dan tokio-websockets. Frontend Yew dihubungkan langsung ke backend Rust menggunakan websocket sehingga komunikasi realtime tetap berjalan dengan baik.
 
+- Perubahan ini berhasil karena aplikasi dapat mengirim dan menerima pesan secara realtime antar beberapa client/browser tanpa perlu refresh halaman. Semua pesan berhasil dibroadcast ke seluruh client yang terhubung menggunakan broadcast channel.
+
+- Menurut saya, versi Rust lebih menarik dibanding versi JavaScript karena seluruh stack aplikasi menggunakan Rust, mulai dari frontend hingga backend. Selain itu, Rust juga memberikan performa dan concurrency yang lebih baik, walaupun implementasinya lebih kompleks dibanding JavaScript.

@@ -1,106 +1,73 @@
 use futures_util::{SinkExt, StreamExt};
-use std::{
-    collections::HashMap,
-    sync::{Arc, Mutex},
+use tokio::net::{TcpListener, TcpStream};
+use tokio::sync::broadcast;
+use tokio_websockets::{
+    Message,
+    ServerBuilder,
 };
-use tokio::{
-    net::{TcpListener, TcpStream},
-    sync::mpsc,
-};
-use tokio_websockets::{Message, ServerBuilder};
-
-type Tx = mpsc::UnboundedSender<String>;
-type PeerMap = Arc<Mutex<HashMap<usize, Tx>>>;
 
 #[tokio::main]
 async fn main() {
-    let addr = "127.0.0.1:8080";
+    let listener = TcpListener::bind(
+        "127.0.0.1:8080"
+    )
+    .await
+    .unwrap();
 
-    let listener = TcpListener::bind(addr)
-        .await
-        .expect("Cannot bind");
+    println!(
+        "WebSocket server running on ws://127.0.0.1:8080"
+    );
 
-    println!("WebSocket server running on ws://{}", addr);
-
-    let peers: PeerMap = Arc::new(Mutex::new(HashMap::new()));
-
-    let mut id_counter = 0;
+    let (tx, _) =
+        broadcast::channel::<String>(100);
 
     loop {
-        let (stream, addr) = listener.accept().await.unwrap();
+        let (stream, _) =
+            listener.accept().await.unwrap();
 
-        id_counter += 1;
+        let tx = tx.clone();
 
-        let peer_id = id_counter;
-
-        println!("New connection from {}", addr);
-
-        let peers = peers.clone();
+        let rx = tx.subscribe();
 
         tokio::spawn(async move {
-            handle_connection(peer_id, peers, stream, addr).await;
+            handle_connection(stream, tx, rx).await;
         });
     }
 }
 
 async fn handle_connection(
-    id: usize,
-    peers: PeerMap,
     stream: TcpStream,
-    addr: std::net::SocketAddr,
+    tx: broadcast::Sender<String>,
+    mut rx: broadcast::Receiver<String>,
 ) {
     let ws_stream = ServerBuilder::new()
         .accept(stream)
         .await
         .unwrap();
 
-    println!("Client {} connected", id);
+    let (mut ws_sender, mut ws_receiver) =
+        ws_stream.split();
 
-    let (mut ws_sender, mut ws_receiver) = ws_stream.split();
+    let tx_clone = tx.clone();
 
-    let (tx, mut rx) = mpsc::unbounded_channel::<String>();
-
-    peers.lock().unwrap().insert(id, tx);
-
-    let peers_for_broadcast = peers.clone();
-
-    let receive_task = tokio::spawn(async move {
-        while let Some(msg_result) = ws_receiver.next().await {
-            let msg = msg_result.unwrap();
-
-            if msg.is_text() {
-                let text = msg.as_text().unwrap();
-
-                let message = format!("Client {} ({}): {}", id, addr, text);
-
-                println!("{}", message);
-
-                let peers = peers_for_broadcast.lock().unwrap();
-
-                for (&peer_id, tx) in peers.iter() {
-                    if peer_id != id {
-                        let _ = tx.send(message.clone());
-                    }
+    tokio::spawn(async move {
+        while let Some(msg) =
+            ws_receiver.next().await
+        {
+            if let Ok(msg) = msg {
+                if let Some(text) = msg.as_text() {
+                    tx_clone
+                        .send(text.to_string())
+                        .unwrap();
                 }
             }
         }
     });
 
-    let send_task = tokio::spawn(async move {
-        while let Some(msg) = rx.recv().await {
-            ws_sender
-                .send(Message::text(msg))
-                .await
-                .unwrap();
-        }
-    });
-
-    tokio::select! {
-        _ = receive_task => (),
-        _ = send_task => (),
+    while let Ok(msg) = rx.recv().await {
+        ws_sender
+            .send(Message::text(msg))
+            .await
+            .unwrap();
     }
-
-    peers.lock().unwrap().remove(&id);
-
-    println!("Client {} ({}) disconnected", id, addr);
 }
