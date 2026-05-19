@@ -26,3 +26,14 @@ Saat `drop(spawner)` dihapus, program tidak berhenti walaupun semua task telah s
 Pesan yang dikirim oleh satu client akan diterima oleh client lain secara realtime menggunakan websocket. Server menangani setiap client menggunakan asynchronous task dengan `tokio::spawn`. 
 
 Setiap koneksi client dijalankan sebagai task asynchronous terpisah sehingga server dapat menangani banyak koneksi secara concurrent tanpa membuat thread besar untuk setiap client.
+
+**Tutorial 2.2**
+
+Port websocket diubah dari: `ws://127.0.0.1:2000`
+menjadi: `ws://127.0.0.1:8080`
+
+- Hasil
+Client gagal connect ketika masih menggunakan port lama karena server tidak lagi mendengarkan pada port 2000. Setelah client diarahkan ke port 8080, koneksi websocket berhasil kembali dan broadcast chat berjalan normal.
+
+- Penjelasan
+Websocket client dan server harus menggunakan endpoint yang sama. Endpoint terdiri dari protocol, IP address, dan port. Jika port berbeda, maka koneksi tidak dapat dibuat karena client mencoba connect ke service yang tidak tersedia pada port tersebut.
