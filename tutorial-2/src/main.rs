@@ -27,16 +27,18 @@ async fn main() {
     let mut id_counter = 0;
 
     loop {
-        let (stream, _) = listener.accept().await.unwrap();
+        let (stream, addr) = listener.accept().await.unwrap();
 
         id_counter += 1;
 
         let peer_id = id_counter;
 
+        println!("New connection from {}", addr);
+
         let peers = peers.clone();
 
         tokio::spawn(async move {
-            handle_connection(peer_id, peers, stream).await;
+            handle_connection(peer_id, peers, stream, addr).await;
         });
     }
 }
@@ -45,6 +47,7 @@ async fn handle_connection(
     id: usize,
     peers: PeerMap,
     stream: TcpStream,
+    addr: std::net::SocketAddr,
 ) {
     let ws_stream = ServerBuilder::new()
         .accept(stream)
@@ -68,7 +71,7 @@ async fn handle_connection(
             if msg.is_text() {
                 let text = msg.as_text().unwrap();
 
-                let message = format!("Client {}: {}", id, text);
+                let message = format!("Client {} ({}): {}", id, addr, text);
 
                 println!("{}", message);
 
@@ -99,5 +102,5 @@ async fn handle_connection(
 
     peers.lock().unwrap().remove(&id);
 
-    println!("Client {} disconnected", id);
+    println!("Client {} ({}) disconnected", id, addr);
 }

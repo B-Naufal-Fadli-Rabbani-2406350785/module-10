@@ -27,13 +27,26 @@ Pesan yang dikirim oleh satu client akan diterima oleh client lain secara realti
 
 Setiap koneksi client dijalankan sebagai task asynchronous terpisah sehingga server dapat menangani banyak koneksi secara concurrent tanpa membuat thread besar untuk setiap client.
 
+
 **Tutorial 2.2**
 
 Port websocket diubah dari: `ws://127.0.0.1:2000`
 menjadi: `ws://127.0.0.1:8080`
 
+- Penjelasan
+Websocket client dan server harus menggunakan endpoint yang sama. Endpoint terdiri dari protocol, IP address, dan port. Jika port berbeda, maka koneksi tidak dapat dibuat karena client mencoba connect ke service yang tidak tersedia pada port tersebut.
+
 - Hasil
 Client gagal connect ketika masih menggunakan port lama karena server tidak lagi mendengarkan pada port 2000. Setelah client diarahkan ke port 8080, koneksi websocket berhasil kembali dan broadcast chat berjalan normal.
 
+
+**Tutorial 2.3**
+![alt text](image-4.png)
+Program dimodifikasi agar pesan broadcast menampilkan IP address dan port pengirim.
+
 - Penjelasan
-Websocket client dan server harus menggunakan endpoint yang sama. Endpoint terdiri dari protocol, IP address, dan port. Jika port berbeda, maka koneksi tidak dapat dibuat karena client mencoba connect ke service yang tidak tersedia pada port tersebut.
+Fungsi `listener.accept()` mengembalikan `TcpStream` dan `SocketAddr`. `SocketAddr` berisi IP address dan port client. Informasi tersebut digunakan untuk memperjelas identitas pengirim pesan dalam sistem chat websocket.
+
+- Hasil
+Server berhasil menampilkan informasi address setiap client yang terhubung. Pesan broadcast sekarang memiliki informasi tambahan berupa socket address pengirim sehingga identitas koneksi lebih mudah diketahui.
+
