@@ -56,7 +56,18 @@ Server berhasil menampilkan informasi address setiap client yang terhubung. Pesa
 
 
 **Tutorial 3.2**
+![alt text](image-6.png)
+Pada eksperimen ini, saya melakukan beberapa peningkatan tampilan pada aplikasi chat berbasis Yew agar terlihat lebih menarik.
 
+Perubahan yang dilakukan meliputi:
+- penggunaan dark mode
+- background gradient
+- tampilan bubble chat modern
+- indikator status online
+- layout card dengan rounded corner
+- tombol send yang lebih modern
+- perbaikan typography dan spacing
 
 
 **Tutorial 3.Bonus**
+
