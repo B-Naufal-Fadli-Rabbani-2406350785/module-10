@@ -11,3 +11,18 @@ Program dimodifikasi agar memiliki dua task asynchronous yang berjalan bersamaan
 - `drop(spawner)` dihapus
 ![alt text](image-1.png)
 Saat `drop(spawner)` dihapus, program tidak berhenti walaupun semua task telah selesai dijalankan. Hal ini terjadi karena executor masih menunggu kemungkinan adanya task baru dari spawner. Channel komunikasi masih dianggap aktif karena spawner belum di-drop. Executor menjalankan loop `recv()` yang terus menunggu task baru masuk. Karena itu program menjadi hang sampai dihentikan secara manual menggunakan CTRL+C.
+
+
+**Tutorial 2.1**
+![alt text](image-3.png)
+- Cara Menjalankan
+1. Jalankan server dengan:
+`cargo run`
+2. Connect beberapa websocket client ke:
+`ws://127.0.0.1:2000`
+3. Kirim pesan dari salah satu client.
+
+- Hasil
+Pesan yang dikirim oleh satu client akan diterima oleh client lain secara realtime menggunakan websocket. Server menangani setiap client menggunakan asynchronous task dengan `tokio::spawn`. 
+
+Setiap koneksi client dijalankan sebagai task asynchronous terpisah sehingga server dapat menangani banyak koneksi secara concurrent tanpa membuat thread besar untuk setiap client.
